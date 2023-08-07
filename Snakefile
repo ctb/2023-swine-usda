@@ -4,10 +4,16 @@
 # WORT sigs copied from:
 #   "/group/ctbrowngrp/irber/data/wort-data/wort-sra/sigs/{acc}.sig",
 
-INPUT_DIR='sigs'
-OUTPUT_DIR='outputs.swine-x-reps'
-DB='/group/ctbrowngrp/sourmash-db/gtdb-rs214/gtdb-rs214-reps.k21.zip'
-DBLIST='list.gtdb-reps-rs214-k21.txt'
+if 0:
+    INPUT_DIR='sigs'
+    OUTPUT_DIR='outputs.swine-x-reps'
+    DB='/group/ctbrowngrp/sourmash-db/gtdb-rs214/gtdb-rs214-reps.k21.zip'
+    DBLIST='list.gtdb-reps-rs214-k21.txt'
+else:
+    INPUT_DIR='sigs'
+    OUTPUT_DIR='outputs.swine-x-all'
+    DB='/group/ctbrowngrp/sourmash-db/gtdb-rs214/gtdb-rs214-k21.zip'
+    DBLIST='list.gtdb-rs214-k21.txt'
 
 ACCESSIONS, = glob_wildcards(f"{INPUT_DIR}/{{acc}}.sig")
 
