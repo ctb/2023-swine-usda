@@ -13,7 +13,7 @@ ACCESSIONS, = glob_wildcards(f"{INPUT_DIR}/{{acc}}.sig")
 
 rule all:
     input:
-        expand(f"{OUTPUT_DIR}/{{acc}}.gather.out", acc=ACCESSIONS)
+        expand(f"{OUTPUT_DIR}/{{acc}}.gathertax.human.txt", acc=ACCESSIONS)
     
 
 rule fastgather:
@@ -52,4 +52,20 @@ rule gather:
     shell: """
         sourmash gather -k 21 --scaled 10000 {input.sig} {input.db} \
            --picklist {input.picklist}:match:ident -o {output.csv} >& {output.out}
+    """
+
+rule tax:
+    input:
+        csv=f"{OUTPUT_DIR}/{{acc}}.gather.csv",
+        taxdb="gtdb-rs214.lineages.sqldb",
+    output:
+        csv=f"{OUTPUT_DIR}/{{acc}}.gathertax.summarized.csv",
+        human=f"{OUTPUT_DIR}/{{acc}}.gathertax.human.txt",
+    params:
+       prefix=f"{OUTPUT_DIR}/{{acc}}.gathertax"
+    shell: """
+        sourmash tax metagenome -t {input.taxdb} -g {input.csv} \
+             -o {params.prefix} -F csv_summary
+        sourmash tax metagenome -t {input.taxdb} -g {input.csv} \
+             -o {params.prefix} -F human
     """
