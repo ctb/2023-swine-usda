@@ -19,7 +19,8 @@ ACCESSIONS, = glob_wildcards(f"{INPUT_DIR}/{{acc}}.sig")
 
 rule all:
     input:
-        expand(f"{OUTPUT_DIR}/{{acc}}.gathertax.human.txt", acc=ACCESSIONS)
+        expand(f"{OUTPUT_DIR}/{{acc}}.gathertax.human.txt", acc=ACCESSIONS),
+        expand(f"{OUTPUT_DIR}/{{acc}}.x.host.prefetch.csv", acc=ACCESSIONS)
     
 
 rule fastgather:
@@ -45,6 +46,19 @@ rule subtract_host:
     shell: """
         sourmash sig subtract -A {input.wort} {input.wort} {input.host} \
             -o {output} -k 21
+    """
+
+rule containment:
+    input:
+        wort=f"{INPUT_DIR}/{{acc}}.sig",
+        host="hg38+susScr11.sig.gz",
+    output:
+        csv=f"{OUTPUT_DIR}/{{acc}}.x.host.prefetch.csv",
+        csv2=f"{OUTPUT_DIR}/{{acc}}.x.host.search.csv",
+        out=f"{OUTPUT_DIR}/{{acc}}.x.host.search.out"
+    shell: """
+        sourmash prefetch {input.wort} {input.host} -k 21 -o {output.csv}
+        sourmash search --containment {input.host} {input.wort} -k 21 -o {output.csv2}  > {output.out}
     """
 
 rule gather:
