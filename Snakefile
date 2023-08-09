@@ -4,16 +4,26 @@
 # WORT sigs copied from:
 #   "/group/ctbrowngrp/irber/data/wort-data/wort-sra/sigs/{acc}.sig",
 
-if 0:
+if 1:                           # swine x reps
     INPUT_DIR='sigs'
     OUTPUT_DIR='outputs.swine-x-reps'
     DB='/group/ctbrowngrp/sourmash-db/gtdb-rs214/gtdb-rs214-reps.k21.zip'
     DBLIST='list.gtdb-reps-rs214-k21.txt'
-else:
+elif 0:                         # swine x all
     INPUT_DIR='sigs'
     OUTPUT_DIR='outputs.swine-x-all'
     DB='/group/ctbrowngrp/sourmash-db/gtdb-rs214/gtdb-rs214-k21.zip'
     DBLIST='list.gtdb-rs214-k21.txt'
+elif 0:                         # human.x.all
+    INPUT_DIR='sigs.human'
+    OUTPUT_DIR='outputs.human-x-all'
+    DB='/group/ctbrowngrp/sourmash-db/gtdb-rs214/gtdb-rs214-k21.zip'
+    DBLIST='list.gtdb-rs214-k21.txt'
+elif 0:                         # human.x.reps
+    INPUT_DIR='sigs.human'
+    OUTPUT_DIR='outputs.human-x-reps'
+    DB='/group/ctbrowngrp/sourmash-db/gtdb-rs214/gtdb-rs214-reps.k21.zip'
+    DBLIST='list.gtdb-reps-rs214-k21.txt'
 
 ACCESSIONS, = glob_wildcards(f"{INPUT_DIR}/{{acc}}.sig")
 
