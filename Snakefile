@@ -31,6 +31,17 @@ rule all:
     input:
         expand(f"{OUTPUT_DIR}/{{acc}}.gathertax.human.txt", acc=ACCESSIONS),
         expand(f"{OUTPUT_DIR}/{{acc}}.x.host.prefetch.csv", acc=ACCESSIONS)
+
+# test!
+rule fastmultigather:
+    input:
+        queryfile="list.human.sigs.txt",
+        against="list.host+gtdb-rs214-k21.txt",
+    threads: 128
+    shell: """
+        /usr/bin/time -v sourmash scripts fastmultigather {input.queryfile} {input.against} \
+            -k 21 -c {threads}
+    """
     
 
 rule fastgather:
@@ -42,9 +53,10 @@ rule fastgather:
     resources:
         # limit to one fastgather with --resources rayon_exclude=1
         rayon_exclude=1
+    threads: 32
     shell: """
         sourmash scripts fastgather {input.wort} {input.against} \
-            -o {output.csv} -k 21 --scaled 10000
+            -o {output.csv} -k 21 --scaled 10000 -c {threads}
     """
 
 rule subtract_host:
