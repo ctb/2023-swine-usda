@@ -36,13 +36,25 @@ rule all:
 rule fastmultigather:
     input:
         queryfile="list.human.sigs.txt",
-        against="list.host+gtdb-rs214-k21.txt",
+        #against="list.host+gtdb-rs214-k21.txt",
+        against="/home/ctbrown/scratch/2022-database-covers/list.gtdb-rs214.k21.cover.txt",
     threads: 128
     shell: """
         /usr/bin/time -v sourmash scripts fastmultigather {input.queryfile} {input.against} \
-            -k 21 -c {threads}
+            -k 21 -c {threads} -s 10000
     """
     
+rule fastmultigather_all:
+    input:
+        queryfile="list.all-swine-sra.txt",
+        #against="list.host+gtdb-rs214-k21.txt",
+        #against="/home/ctbrown/scratch/2022-database-covers/list.gtdb-rs214.k21.cover.txt",
+        against="list.host+gtdb-rs214-k21-cover.txt",
+    threads: 128
+    shell: """
+        /usr/bin/time -v sourmash scripts fastmultigather {input.queryfile} {input.against} \
+            -k 21 -c {threads} -s 10000
+    """
 
 rule fastgather:
     input:
